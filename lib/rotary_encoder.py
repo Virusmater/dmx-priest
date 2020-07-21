@@ -16,7 +16,7 @@ class RotaryEncoder:
         self.sw = Button(17)
         self.pin_a.when_pressed = self.pin_a_rising  # Register the event handler for pin A
         self.pin_b.when_pressed = self.pin_b_rising  # Register the event handler for pin B
-        self.selfsw.when_pressed = self.pin_sw_rising
+        self.sw.when_pressed = self.pin_sw_rising
 
     def pin_a_rising(self):  # Pin A event handler
         if self.pin_b.is_pressed:
