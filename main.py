@@ -1,4 +1,5 @@
-import glob
+import os
+from itertools import cycle
 
 from lib import RPi_I2C_driver, rotary_encoder
 
@@ -8,7 +9,7 @@ RECORD_MENU = 2
 
 
 def get_preset_name(position):
-    return glob.glob("presets/*")[position]
+    return cycle(sorted(os.listdir("presets")))[position]
 
 
 class Menu:
