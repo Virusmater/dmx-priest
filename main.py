@@ -1,5 +1,4 @@
 import os
-from itertools import cycle
 
 from lib import RPi_I2C_driver, rotary_encoder
 
@@ -7,9 +6,15 @@ MAIN_MENU = 0
 PLAY_MENU = 1
 RECORD_MENU = 2
 
+presets = sorted(os.listdir("presets"))
+
 
 def get_preset_name(position):
-    return cycle(sorted(os.listdir("presets")))[position]
+    if position >= len(presets):
+        position = len(presets) - 1
+    elif position < 0:
+        position = 0
+    return sorted(os.listdir("presets"))[position]
 
 
 class Menu:
