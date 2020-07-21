@@ -27,6 +27,7 @@ class Menu:
         self.set_text()
 
     def set_text(self):
+        self.lcd.lcd_clear()
         if self.menu == MAIN_MENU:
             if self.position <= 20:
                 self.lcd.lcd_display_string("Play mode  ", 1)
