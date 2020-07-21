@@ -39,7 +39,7 @@ class Menu:
                 self.lcd.lcd_display_string("push knob...", 2)
         elif self.menu == PLAY_MENU:
             self.lcd.lcd_display_string("Select and push:", 1)
-            self.lcd.lcd_display_string(get_preset_name(self.position), 2)
+            self.lcd.lcd_display_string(self.get_preset_name(), 2)
 
     def select(self):
         if self.menu == MAIN_MENU:
