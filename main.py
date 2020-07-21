@@ -7,7 +7,7 @@ PLAY_MENU = 1
 RECORD_MENU = 2
 
 presets = sorted(os.listdir("presets"))
-
+presets.append("blackout")
 
 
 
@@ -26,7 +26,7 @@ class Menu:
             self.position = len(presets) - 1
         elif self.position < 0:
             self.position = 0
-        return sorted(os.listdir("presets"))[self.position]
+        return sorted(presets)[self.position]
 
     def set_text(self):
         self.lcd.lcd_clear()
