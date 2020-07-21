@@ -51,7 +51,7 @@ class i2c_device:
 
 
 # LCD Address
-ADDRESS = 0x27
+ADDRESS = 0x3f
 
 # commands
 LCD_CLEARDISPLAY = 0x01
