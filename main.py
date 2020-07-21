@@ -9,12 +9,7 @@ RECORD_MENU = 2
 presets = sorted(os.listdir("presets"))
 
 
-def get_preset_name(position):
-    if position >= len(presets):
-        position = len(presets) - 1
-    elif position < 0:
-        position = 0
-    return sorted(os.listdir("presets"))[position]
+
 
 
 class Menu:
@@ -25,6 +20,13 @@ class Menu:
         self.rotary = rotary_encoder.RotaryEncoder()
         self.lcd = RPi_I2C_driver.lcd()
         self.set_text()
+
+    def get_preset_name(self):
+        if self.position >= len(presets):
+            self.position = len(presets) - 1
+        elif self.position < 0:
+            self.position = 0
+        return sorted(os.listdir("presets"))[self.position]
 
     def set_text(self):
         self.lcd.lcd_clear()
