@@ -46,7 +46,7 @@ class Menu:
                 print(self.position)
             else:
                 self.select()
-            self.set_text(self.menu, self.menu)
+            self.set_text()
 
 
 def main():
