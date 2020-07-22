@@ -12,7 +12,7 @@ setup(
     install_requires=['gpiozero', 'smbus'],
     packages=find_packages(),
     data_files=[
-        ('presets', glob('dmx_priest/presets/*')),  # source_dir only - not recursive
+        ('dmx_priest.presets', glob('dmx_priest/presets/*')),  # source_dir only - not recursive
     ],
 
     entry_points=dict(
