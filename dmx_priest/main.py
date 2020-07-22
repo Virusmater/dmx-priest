@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
-
+from os.path import expanduser
+from shutil import copyfile
 from dmx_priest import ola
 
 from dmx_priest.lib import RPi_I2C_driver
@@ -10,6 +11,7 @@ MAIN_MENU = 0
 PLAY_MENU = 1
 RECORD_MENU = 2
 
+preset_path = expanduser("~") + "/.config/dmx-priest/presets"
 
 
 class Menu:
@@ -86,6 +88,9 @@ class Menu:
 
 
 def main():
+    if not os.path.exists(preset_path):
+        os.makedirs(preset_path)
+        copyfile("presets/99_blackout", preset_path)
     menu = Menu()
     menu.pool()
 
