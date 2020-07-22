@@ -1,0 +1,3 @@
+[console_scripts]
+dmx-priest = dmx_priest.main:main
+
