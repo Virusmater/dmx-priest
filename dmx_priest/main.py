@@ -1,9 +1,10 @@
 import os
 from datetime import datetime
 
-import ola
+from dmx_priest import ola
 
-from lib import RPi_I2C_driver, rotary_encoder
+from dmx_priest.lib import RPi_I2C_driver
+from dmx_priest.lib import rotary_encoder
 
 MAIN_MENU = 0
 PLAY_MENU = 1
