@@ -55,7 +55,7 @@ class Menu:
     def select(self):
         if self.menu == MAIN_MENU:
             if self.position <= 20:
-                self.presets = sorted(os.listdir(presets_dir))
+                self.presets = sorted(os.listdir(user_preset_path))
                 self.menu = PLAY_MENU
                 self.position = 0
                 ola.patch_output()
