@@ -19,6 +19,7 @@ user_preset_path = expanduser("~") + "/.config/dmx-priest/presets"
 class Menu:
     presets = []
     is_recording = False
+    is_playing = False
 
     def __init__(self):
         self.position = 0
@@ -44,7 +45,10 @@ class Menu:
                 self.lcd.lcd_display_string("Record mode", 1)
                 self.lcd.lcd_display_string("push the knob", 2)
         elif self.menu == PLAY_MENU:
-            self.lcd.lcd_display_string("Turn and push:", 1)
+            if self.is_playing:
+                self.lcd.lcd_display_string("Playing now:", 1)
+            else:
+                self.lcd.lcd_display_string("Turn and push:", 1)
             self.lcd.lcd_display_string(self.get_preset_name(), 2)
         elif self.menu == RECORD_MENU:
             if self.is_recording:
@@ -55,6 +59,7 @@ class Menu:
                 self.lcd.lcd_display_string("push to start", 2)
 
     def select(self):
+        self.is_playing = False
         if self.menu == MAIN_MENU:
             if self.position <= 20:
                 self.presets = sorted(os.listdir(user_preset_path))
@@ -65,6 +70,7 @@ class Menu:
                 self.menu = RECORD_MENU
                 ola.patch_input()
         elif self.menu == PLAY_MENU:
+            self.is_playing = True
             ola.play(user_preset_path + "/" + self.get_preset_name())
             if self.get_preset_name() == "99_blackout.ola":
                 sleep(1)
