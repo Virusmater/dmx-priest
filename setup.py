@@ -11,7 +11,7 @@ setup(
     license='GPLv3',
     install_requires=['gpiozero', 'smbus'],
     packages=find_packages(),
-    package_data={'dmx_priest.presets': ['99_blackout']},
+    package_data={'presets': ['*']},
     entry_points=dict(
         console_scripts=['dmx-priest=dmx_priest.main:main']
     )
