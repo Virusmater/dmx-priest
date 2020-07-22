@@ -10,8 +10,8 @@ setup(
     author_email='virusmater@gmail.com',
     license='GPLv3',
     install_requires=['gpiozero', 'smbus'],
-    package_data={'presets': ['99_blackout']},
     packages=find_packages(),
+    package_data={'dmx_priest.presets': ['99_blackout']},
     entry_points=dict(
         console_scripts=['dmx-priest=dmx_priest.main:main']
     )
