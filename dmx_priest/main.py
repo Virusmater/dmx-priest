@@ -11,7 +11,7 @@ MAIN_MENU = 0
 PLAY_MENU = 1
 RECORD_MENU = 2
 
-preset_path = expanduser("~") + "/.config/dmx-priest/presets"
+user_preset_path = expanduser("~") + "/.config/dmx-priest/presets"
 
 
 class Menu:
@@ -87,9 +87,9 @@ class Menu:
 
 
 def main():
-    if not os.path.exists(preset_path):
-        os.makedirs(preset_path)
-        copyfile(presets_dir + "/99_blackout", preset_path)
+    if not os.path.exists(user_preset_path):
+        os.makedirs(user_preset_path)
+        copyfile(presets_dir + "/99_blackout", user_preset_path)
     menu = Menu()
     menu.pool()
 
