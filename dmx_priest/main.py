@@ -46,7 +46,7 @@ class Menu:
                 self.lcd.lcd_display_string("push the knob", 2)
         elif self.menu == PLAY_MENU:
             if self.is_playing:
-                self.lcd.lcd_display_string("Playing now:", 1)
+                self.lcd.lcd_display_string("Playing:", 1)
             else:
                 self.lcd.lcd_display_string("Turn and push:", 1)
             self.lcd.lcd_display_string(self.get_preset_name(), 2)
@@ -94,7 +94,6 @@ class Menu:
             message = self.rotary.eventq.get()
             if message == rotary_encoder.RotaryEncoder.LEFT or message == rotary_encoder.RotaryEncoder.RIGHT:
                 self.position += message
-                print(self.position)
             else:
                 self.select()
             self.set_text()
