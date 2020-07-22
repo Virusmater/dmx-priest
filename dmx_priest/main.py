@@ -89,7 +89,7 @@ class Menu:
 def main():
     if not os.path.exists(user_preset_path):
         os.makedirs(user_preset_path)
-        copyfile(presets_dir + "/99_blackout.ola", user_preset_path)
+        copyfile(presets_dir + "/99_blackout.ola", user_preset_path + "/99_blackout.ola")
     menu = Menu()
     menu.pool()
 
