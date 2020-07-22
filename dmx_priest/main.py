@@ -69,7 +69,7 @@ class Menu:
             if self.is_recording:
                 now = datetime.now()
                 name = now.strftime("%Y.%m.%d %H:%M")
-                ola.record(name)
+                ola.record(user_preset_path + "/" + name + ".ola")
             else:
                 ola.stop()
                 self.menu = MAIN_MENU
@@ -89,7 +89,7 @@ class Menu:
 def main():
     if not os.path.exists(user_preset_path):
         os.makedirs(user_preset_path)
-        copyfile(presets_dir + "/99_blackout", user_preset_path)
+        copyfile(presets_dir + "/99_blackout.ola", user_preset_path)
     menu = Menu()
     menu.pool()
 
