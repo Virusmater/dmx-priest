@@ -2,6 +2,8 @@ import os
 from datetime import datetime
 from os.path import expanduser
 from shutil import copyfile
+from time import sleep
+
 from dmx_priest import ola, presets_dir
 
 from dmx_priest.lib import RPi_I2C_driver
@@ -63,7 +65,13 @@ class Menu:
                 self.menu = RECORD_MENU
                 ola.patch_input()
         elif self.menu == PLAY_MENU:
-            ola.play(self.get_preset_name())
+            ola.play(user_preset_path + "/" + self.get_preset_name())
+            if self.get_preset_name() == "99_blackout.ola":
+                sleep(1)
+                ola.stop()
+                ola.unpatch()
+                self.menu = MAIN_MENU
+                self.position = 0
         elif self.menu == RECORD_MENU:
             self.is_recording = not self.is_recording
             if self.is_recording:

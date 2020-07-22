@@ -28,11 +28,9 @@ def stop():
 
 def play(preset):
     stop()
-    preset = "presets/" + preset
     subprocess.Popen(["ola_recorder", "--playback", preset, "-i", "0"])
 
 
 def record(preset):
     stop()
-    preset = "presets/" + preset
     subprocess.Popen(["ola_recorder", "-u", "0,1", "-r", preset])
