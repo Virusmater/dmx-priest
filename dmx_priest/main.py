@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from os.path import expanduser
 from shutil import copyfile
-from dmx_priest import ola
+from dmx_priest import ola, presets_dir
 
 from dmx_priest.lib import RPi_I2C_driver
 from dmx_priest.lib import rotary_encoder
@@ -15,7 +15,6 @@ preset_path = expanduser("~") + "/.config/dmx-priest/presets"
 
 
 class Menu:
-
     presets = []
     is_recording = False
 
@@ -56,7 +55,7 @@ class Menu:
     def select(self):
         if self.menu == MAIN_MENU:
             if self.position <= 20:
-                self.presets = sorted(os.listdir("presets"))
+                self.presets = sorted(os.listdir(presets_dir))
                 self.menu = PLAY_MENU
                 self.position = 0
                 ola.patch_output()
@@ -90,7 +89,7 @@ class Menu:
 def main():
     if not os.path.exists(preset_path):
         os.makedirs(preset_path)
-        copyfile("presets/99_blackout", preset_path)
+        copyfile(presets_dir + "/99_blackout", preset_path)
     menu = Menu()
     menu.pool()
 
