@@ -15,7 +15,7 @@ Console connects goes to Art-Net to DMX converter with two DMX output ports (dmX
 
 We need a device that would be easy to operate for everybody. It should record and playback scenes from the console without pluggin the console itself.
 ## Device in case
-![device](/deivce.jpg?raw=true "Device in case")
+![device](/device.jpg?raw=true "Device in case")
 ## Hardware
 - raspberry pi
 - lcd display (<https://opencircuit.shop/Product/LCD-display-1602-symbols-2-rows-16-columns-.>)
