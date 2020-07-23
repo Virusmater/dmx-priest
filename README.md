@@ -5,14 +5,15 @@ dmx-priest is a cheap DIY alternative to an expensive commercial DMX Recall Unit
 2. Push the knob. Screen: "Ready to record - push to start"
 3. Prepare your light table or any other source of Art-Net signal
 4. Push the knob to start recording. Screen: "Rec in progress - push to stop"
-5. Do desired light scene. dmx-priest will record ot
-6. Push the knob to stop recordint. Screen: "Play mode - push the knob"
-7. You will see your recoding in the format YYYY.mm.dd HH:MM
+5. Start desired light scene on the source. dmx-priest will record it
+6. Push the knob to stop the recording. Screen: "Play mode - push the knob"
+7. Push the knob to enter the Play mode. You will see your recoding in the format YYYY.mm.dd HH:MM
 8. Select your recording to playback or select 99_blackout to exit and stop the program
 ## Situation
 We have a lights console (Avolites Titan Quartz) for big shows and a manual control. 
-Console connects goes to Art-Net to DMX converter with two DMX output ports (dmXLAN Buddy).
-We need a device that would be easy to operate for everybody, that can record and playback scenes from the console.  
+Console connects goes to Art-Net to DMX converter with two DMX output ports (dmXLAN Buddy).  
+
+We need a device that would be easy to operate for everybody. It should record and playback scenes from the console without pluggin the console itself.
 ## Hardware
 - raspberry pi
 - lcd display (<https://opencircuit.shop/Product/LCD-display-1602-symbols-2-rows-16-columns-.>)
@@ -42,18 +43,17 @@ install Raspberry Pi OS (32-bit) Lite using Etcher
 
 add file "ssh" to /boot in order to enable SSH access  
 ```bash
-ssh pi@[Pi-IP-address]
+youruser@homepc:~ $ ssh pi@[Pi-IP-address]
 ```
 Upgrade your OS:
 ```bash
-sudo apt-get update
-sudo apt-get dist-upgrade
+pi@raspberrypi:~ $ sudo apt-get update
+pi@raspberrypi:~ $ sudo apt-get dist-upgrade
 ```
 ### Open Lightning Architecture
 Install software to build Open Lightning Architecture and also few python libraries
 ```bash
 pi@raspberrypi:~ $ sudo apt-get install git autoconf libtool bison flex uuid-dev libcppunit-dev python-protobuf python-numpy protobuf-compiler  libmicrohttpd-dev libprotoc-dev i2c-tools python3-smbus python3-gpiozero python3-pip3
-clone ola repo
 pi@raspberrypi:~ $ git clone https://github.com/OpenLightingProject/ola.git
 pi@raspberrypi:~ $ cd ola
 ```
@@ -76,7 +76,7 @@ create a systemd service for autoload of olad:
 
 create .service file
 ```
-sudo nano /etc/systemd/system/olad.service
+pi@raspberrypi:~ $ sudo nano /etc/systemd/system/olad.service
 ```
 and add inside:
 ```
