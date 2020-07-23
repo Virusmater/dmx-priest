@@ -9,17 +9,21 @@ dmx-priest is a cheap DIY alternative to an expensive commercial DMX Recall Unit
 6. Push the knob to stop recordint. Screen: "Play mode - push the knob"
 7. You will see your recoding in the format YYYY.mm.dd HH:MM
 8. Select your recording to playback or select 99_blackout to exit and stop the program
+## Situation
+We have a lights console (Avolites Titan Quartz) for big shows and a manual control. 
+Console connects goes to Art-Net to DMX converter with two DMX output ports (dmXLAN Buddy).
+We need a device that would be easy to operate for everybody, that can record and playback scenes from the console.  
 ## Hardware
 - raspberry pi
-- lcd display (https://opencircuit.shop/Product/LCD-display-1602-symbols-2-rows-16-columns-.)
-- rotary encoder (https://opencircuit.shop/Product/Rotary-Encoder-Module)
+- lcd display (<https://opencircuit.shop/Product/LCD-display-1602-symbols-2-rows-16-columns-.>)
+- rotary encoder (<https://opencircuit.shop/Product/Rotary-Encoder-Module>)
 - jump wires
 - optional: switch
 
 ### Connect LCD
 - GND to Pin 6 (Ground)
 - VCC to Pin 4 (5V power)
-- SDA to Pin 3 (GPIO2)
+- SDA to Pin 3 (GPIO 2)
 - SLC to Pin 5 (GPIO 3)
 
 ### Connect Rotary Encoder
