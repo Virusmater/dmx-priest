@@ -110,7 +110,7 @@ get address of the LCD display:
 ```bash
 pi@raspberrypi:~/dmx-priest $ sudo i2cdetect -y 1
 ```
-In my case it was 3f. Change it in RPi_I2C_driver.py if needed
+In my case it was 3f. Change it in RPi_I2C_driver.py if needed (better to take it from the variable, but it isn't done yet)
 ### dmx-priest
 install application for recording and playing presets:
 ```bash
