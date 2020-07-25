@@ -117,6 +117,17 @@ get address of the LCD display:
 pi@raspberrypi:~/dmx-priest $ sudo i2cdetect -y 1
 ```
 In my case it was 3f. Change it in RPi_I2C_driver.py if needed (better to take it from the variable, but it isn't done yet)
+### Static IP (optional)
+Just to be sure let's set on Raspberry Pi static IP in 2.x.x.x range.  
+Add to the end of /etc/dhcpcd.conf following lines:
+```bash
+# Example static IP configuration:
+interface eth0
+static ip_address=2.150.43.69/24
+static routers=2.124.1.1
+static domain_name_servers=2.124.1.1
+```
+
 ### dmx-priest
 install application for recording and playing presets:
 ```bash
