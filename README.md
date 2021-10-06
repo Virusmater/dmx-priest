@@ -148,6 +148,7 @@ Restart=always
 RestartSec=1
 User=pi
 ExecStart=dmx-priest
+Environment=PYTHONUNBUFFERED=1
 
 [Install]
 WantedBy=multi-user.target

@@ -15,6 +15,7 @@ PLAY_MENU = 1
 RECORD_MENU = 2
 
 user_preset_path = expanduser("~") + "/.config/dmx-priest/presets"
+beamer = Beamer
 
 
 def pool():
@@ -78,7 +79,7 @@ class Menu:
                     self.position = 0
                     ola.patch_output()
                 else:
-                    Beamer.toggle()
+                    beamer.toggle()
             else:
                 self.menu = RECORD_MENU
                 ola.patch_input()
