@@ -15,7 +15,7 @@ PLAY_MENU = 1
 RECORD_MENU = 2
 
 user_preset_path = expanduser("~") + "/.config/dmx-priest/presets"
-beamer = Beamer
+beamer = Beamer()
 
 
 def pool():
