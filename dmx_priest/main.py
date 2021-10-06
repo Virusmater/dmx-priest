@@ -50,7 +50,10 @@ class Menu:
                     self.lcd.lcd_display_string("Play mode", 1)
                     self.lcd.lcd_display_string("push the knob", 2)
                 else:
-                    self.lcd.lcd_display_string("Beamer", 1)
+                    if beamer.init:
+                        self.lcd.lcd_display_string("Beamer", 1)
+                    else:
+                        self.lcd.lcd_display_string("Beamer error", 1)
                     self.lcd.lcd_display_string("push to toggle", 2)
             elif self.position > 20:
                 self.lcd.lcd_display_string("Record mode", 1)
