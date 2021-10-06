@@ -9,7 +9,7 @@ setup(
     author='Dima Kompot',
     author_email='virusmater@gmail.com',
     license='GPLv3',
-    install_requires=['gpiozero', 'smbus'],
+    install_requires=['gpiozero', 'smbus', 'pyserial'],
     packages=find_packages(),
     package_data={'dmx_priest': ['presets/*']},
     entry_points=dict(

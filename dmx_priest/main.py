@@ -8,12 +8,18 @@ from dmx_priest import ola, presets_dir
 
 from dmx_priest.lib import RPi_I2C_driver
 from dmx_priest.lib import rotary_encoder
+from dmx_priest.lib.beamer import Beamer
 
 MAIN_MENU = 0
 PLAY_MENU = 1
 RECORD_MENU = 2
 
 user_preset_path = expanduser("~") + "/.config/dmx-priest/presets"
+
+
+def pool():
+    while True:
+        sleep(10)
 
 
 class Menu:
@@ -24,7 +30,7 @@ class Menu:
     def __init__(self):
         self.position = 0
         self.menu = MAIN_MENU
-        self.rotary = rotary_encoder.RotaryEncoder()
+        self.rotary = rotary_encoder.RotaryEncoder(callback=self.action)
         self.lcd = RPi_I2C_driver.lcd()
         self.set_text()
 
@@ -39,8 +45,12 @@ class Menu:
         self.lcd.lcd_clear()
         if self.menu == MAIN_MENU:
             if self.position <= 20:
-                self.lcd.lcd_display_string("Play mode", 1)
-                self.lcd.lcd_display_string("push the knob", 2)
+                if self.position % 2 == 0:
+                    self.lcd.lcd_display_string("Play mode", 1)
+                    self.lcd.lcd_display_string("push the knob", 2)
+                else:
+                    self.lcd.lcd_display_string("Beamer", 1)
+                    self.lcd.lcd_display_string("push to toggle", 2)
             elif self.position > 20:
                 self.lcd.lcd_display_string("Record mode", 1)
                 self.lcd.lcd_display_string("push the knob", 2)
@@ -62,10 +72,13 @@ class Menu:
         self.is_playing = False
         if self.menu == MAIN_MENU:
             if self.position <= 20:
-                self.presets = sorted(os.listdir(user_preset_path))
-                self.menu = PLAY_MENU
-                self.position = 0
-                ola.patch_output()
+                if self.position % 2 == 0:
+                    self.presets = sorted(os.listdir(user_preset_path))
+                    self.menu = PLAY_MENU
+                    self.position = 0
+                    ola.patch_output()
+                else:
+                    Beamer.toggle()
             else:
                 self.menu = RECORD_MENU
                 ola.patch_input()
@@ -89,22 +102,22 @@ class Menu:
                 self.menu = MAIN_MENU
                 self.position = 0
 
-    def pool(self):
-        while True:
-            message = self.rotary.eventq.get()
-            if message == rotary_encoder.RotaryEncoder.LEFT or message == rotary_encoder.RotaryEncoder.RIGHT:
-                self.position += message
-            else:
-                self.select()
-            self.set_text()
+    def action(self, message):
+        if message == rotary_encoder.RotaryEncoder.LEFT or message == rotary_encoder.RotaryEncoder.RIGHT:
+            self.position += message
+        else:
+            self.select()
+        if self.position < 0:
+            self.position = 0
+        self.set_text()
 
 
 def main():
     if not os.path.exists(user_preset_path):
         os.makedirs(user_preset_path)
         copyfile(presets_dir + "/99_blackout.ola", user_preset_path + "/99_blackout.ola")
-    menu = Menu()
-    menu.pool()
+    Menu()
+    pool()
 
 
 if __name__ == '__main__':
