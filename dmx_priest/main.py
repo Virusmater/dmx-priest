@@ -19,9 +19,11 @@ RECORD_MENU = 2
 QLC_MENU = 3
 
 user_preset_path = expanduser("~") + "/.config/dmx-priest/presets"
+config_path = expanduser("~") + "/.config/dmx-priest/"
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(
-        handlers=[RotatingFileHandler(filename='dmx-priest.log', maxBytes=100000, backupCount=10)],
+        handlers=[RotatingFileHandler(filename=config_path+'dmx-priest.log', maxBytes=100000, backupCount=10)],
         level=logging.DEBUG,
         format="[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s",
         datefmt='%Y-%m-%dT%H:%M:%S')
