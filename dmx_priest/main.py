@@ -46,6 +46,7 @@ class Menu:
             logger.error("Failed to open LCD")
             logger.error(e, exc_info=True)
             raise
+        self.blackout_button = blackout_button.BlackoutButton(callback=self.blackout_button_action)
         self.set_text()
 
     def get_preset_name(self):
