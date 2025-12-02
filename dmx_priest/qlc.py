@@ -1,16 +1,7 @@
 import subprocess
 import os
 from time import sleep
-
-
-def unpatch():
-    # output ports
-    subprocess.run(["ola_patch", "-d", "2", "-r", "-p", "0", "-u", "0"])
-    subprocess.run(["ola_patch", "-d", "2", "-r", "-p", "1", "-u", "1"])
-    # input ports
-    subprocess.run(["ola_patch", "-i", "-d", "2", "-r", "-p", "0", "-u", "0"])
-    subprocess.run(["ola_patch", "-i", "-d", "2", "-r", "-p", "1", "-u", "1"])
-
+from ola import unpatch
 
 def start_qlc():
     unpatch()
