@@ -5,15 +5,17 @@ from os.path import expanduser
 from shutil import copyfile
 from time import sleep
 
-from dmx_priest import ola, presets_dir
+from dmx_priest import ola, presets_dir, qlc
 
 from dmx_priest.lib import RPi_I2C_driver
 from dmx_priest.lib import rotary_encoder
 from dmx_priest.lib.beamer import Beamer
+from dmx_priest.lib import blackout_button
 
 MAIN_MENU = 0
 PLAY_MENU = 1
 RECORD_MENU = 2
+QLC_MENU = 3
 
 user_preset_path = expanduser("~") + "/.config/dmx-priest/presets"
 logger = logging.getLogger(__name__)
@@ -66,8 +68,11 @@ class Menu:
                     else:
                         self.lcd.lcd_display_string("Beamer error", 1)
                     self.lcd.lcd_display_string("push to toggle", 2)
-            elif self.position > 20:
+            elif self.position <= 30:
                 self.lcd.lcd_display_string("Record mode", 1)
+                self.lcd.lcd_display_string("push the knob", 2)
+            elif self.position > 30:
+                self.lcd.lcd_display_string("QLC mode", 1)
                 self.lcd.lcd_display_string("push the knob", 2)
         elif self.menu == PLAY_MENU:
             if self.is_playing:
@@ -82,6 +87,10 @@ class Menu:
             else:
                 self.lcd.lcd_display_string("Ready to record", 1)
                 self.lcd.lcd_display_string("push to start", 2)
+        elif self.menu == QLC_MENU:
+            self.lcd.lcd_display_string("QLC in Progress", 1)
+            self.lcd.lcd_display_string("push to stop", 2)
+
 
     def select(self):
         self.is_playing = False
@@ -94,18 +103,18 @@ class Menu:
                     ola.patch_output()
                 else:
                     beamer.toggle()
-            else:
+            elif self.position <= 30:
                 self.menu = RECORD_MENU
                 ola.patch_input()
+            else:
+                self.menu = QLC_MENU
+                qlc.start_qlc()
+                print("after start qlc")
         elif self.menu == PLAY_MENU:
             self.is_playing = True
             ola.play(user_preset_path + "/" + self.get_preset_name())
             if self.get_preset_name() == "99_blackout.ola":
-                sleep(1)
-                ola.stop()
-                ola.unpatch()
-                self.menu = MAIN_MENU
-                self.position = 0
+                self.blackout()
         elif self.menu == RECORD_MENU:
             self.is_recording = not self.is_recording
             if self.is_recording:
@@ -116,6 +125,12 @@ class Menu:
                 ola.stop()
                 self.menu = MAIN_MENU
                 self.position = 0
+        elif self.menu == QLC_MENU:
+            self.lcd.lcd_display_string("QLC in stopping..", 1)
+            self.lcd.lcd_display_string("please wait...", 2)
+            qlc.stop()
+            self.menu = MAIN_MENU
+            self.position = 0
 
     def action(self, message):
         if message == rotary_encoder.RotaryEncoder.LEFT or message == rotary_encoder.RotaryEncoder.RIGHT:
@@ -126,6 +141,40 @@ class Menu:
             self.position = 0
         self.set_text()
 
+    def blackout_button_action(self):
+        self.blackout()
+
+    def blackout_routine(self, phase):
+        ola.patch_output()
+        self.lcd.lcd_clear()
+        self.lcd.lcd_display_string("Power off ("+phase+"/3)", 1)
+        self.lcd.lcd_display_string("blackout", 2)
+        qlc.stop()
+        self.lcd.lcd_display_string("blackout.", 2)
+        beamer.off()
+        sleep(2)
+        self.lcd.lcd_display_string("blackout..", 2)
+        ola.unpatch()
+        sleep(2)
+        self.lcd.lcd_display_string("blackout...", 2)
+        ola.patch_output()
+        sleep(2)
+        ola.play(user_preset_path + "/" + "99_blackout.ola")
+        self.lcd.lcd_display_string("blackout....", 2)
+        sleep(2)
+        ola.play(user_preset_path + "/" + "99_blackout.ola")
+        sleep(2)
+        self.lcd.lcd_display_string("blackout.....", 2)
+        ola.stop()
+        ola.unpatch()
+
+    def blackout(self):
+        self.blackout_routine("1")
+        self.blackout_routine("2")
+        self.blackout_routine("3")
+        self.menu = MAIN_MENU
+        self.position = 0
+        self.set_text()
 
 def main():
     if not os.path.exists(user_preset_path):
