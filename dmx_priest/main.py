@@ -1,6 +1,7 @@
 import os
 import logging
 from datetime import datetime
+from logging.handlers import RotatingFileHandler
 from os.path import expanduser
 from shutil import copyfile
 from time import sleep
@@ -19,7 +20,11 @@ QLC_MENU = 3
 
 user_preset_path = expanduser("~") + "/.config/dmx-priest/presets"
 logger = logging.getLogger(__name__)
-logging.basicConfig(filename='dmx-priest.log', encoding='utf-8', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+        handlers=[RotatingFileHandler(filename='dmx-priest.log', maxBytes=100000, backupCount=10)],
+        level=logging.DEBUG,
+        format="[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s",
+        datefmt='%Y-%m-%dT%H:%M:%S')
 try:
     beamer = Beamer()
 except:
@@ -170,12 +175,17 @@ class Menu:
         ola.unpatch()
 
     def blackout(self):
+        logger.debug("blackout initiated")
         self.blackout_routine("1")
+        logger.debug("blackout 1 finished")
         self.blackout_routine("2")
+        logger.debug("blackout 2 finished")
         self.blackout_routine("3")
+        logger.debug("blackout 3 finished")
         self.menu = MAIN_MENU
         self.position = 0
         self.set_text()
+        logger.debug("blackout finished")
 
 def main():
     if not os.path.exists(user_preset_path):
