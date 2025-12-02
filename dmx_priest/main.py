@@ -1,4 +1,5 @@
 import os
+import logging
 from datetime import datetime
 from os.path import expanduser
 from shutil import copyfile
@@ -15,8 +16,13 @@ PLAY_MENU = 1
 RECORD_MENU = 2
 
 user_preset_path = expanduser("~") + "/.config/dmx-priest/presets"
-beamer = Beamer()
-
+logger = logging.getLogger(__name__)
+logging.basicConfig(filename='dmx-priest.log', encoding='utf-8', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+try:
+    beamer = Beamer()
+except:
+    logger.error("Failed to open serial port for beamer control")
+    pass
 
 def pool():
     while True:
@@ -32,7 +38,12 @@ class Menu:
         self.position = 0
         self.menu = MAIN_MENU
         self.rotary = rotary_encoder.RotaryEncoder(callback=self.action)
-        self.lcd = RPi_I2C_driver.lcd()
+        try:
+            self.lcd = RPi_I2C_driver.lcd()
+        except Exception as e:
+            logger.error("Failed to open LCD")
+            logger.error(e, exc_info=True)
+            raise
         self.set_text()
 
     def get_preset_name(self):

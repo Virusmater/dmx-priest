@@ -6,13 +6,13 @@ import serial
 class Beamer:
 
     def __init__(self):
-        self.init = True
         self.ser = serial.Serial(
-                port='/dev/ttyUSB0',
-                baudrate=9600,
-                parity=serial.PARITY_NONE,
-                stopbits=serial.STOPBITS_ONE,
-                bytesize=serial.EIGHTBITS)
+            port='/dev/ttyUSB0',
+            baudrate=9600,
+            parity=serial.PARITY_NONE,
+            stopbits=serial.STOPBITS_ONE,
+            bytesize=serial.EIGHTBITS)
+        self.init = True
 
     def toggle(self):
         if not self.init:
