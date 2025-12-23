@@ -6,13 +6,17 @@ import serial
 class Beamer:
 
     def __init__(self):
-        self.ser = serial.Serial(
-            port='/dev/ttyUSB0',
-            baudrate=9600,
-            parity=serial.PARITY_NONE,
-            stopbits=serial.STOPBITS_ONE,
-            bytesize=serial.EIGHTBITS)
+        try:
+            self.ser = serial.Serial(
+                port='/dev/ttyUSB0',
+                baudrate=9600,
+                parity=serial.PARITY_NONE,
+                stopbits=serial.STOPBITS_ONE,
+                bytesize=serial.EIGHTBITS)
+        except:
+            pass
         self.init = True
+
 
     def toggle(self):
         if not self.init:
@@ -53,19 +57,17 @@ class Beamer:
             return
         try:
             self.ser.open()
+            packet = bytearray()
+            packet.append(0x7E)
+            packet.append(0x30)
+            packet.append(0x30)
+            packet.append(0x30)
+            packet.append(0x30)
+            packet.append(0x20)
+            packet.append(0x32)
+            packet.append(0x0D)
+            packet.append(0xFF)
+            self.ser.write(packet)
+            self.ser.close()
         except:
             pass
-
-        packet = bytearray()
-        packet.append(0x7E)
-        packet.append(0x30)
-        packet.append(0x30)
-        packet.append(0x30)
-        packet.append(0x30)
-        packet.append(0x20)
-        packet.append(0x32)
-        packet.append(0x0D)
-        packet.append(0xFF)
-        self.ser.write(packet)
-
-        self.ser.close()

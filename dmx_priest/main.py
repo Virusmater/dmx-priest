@@ -1,7 +1,6 @@
+
 import os
-import logging
 from datetime import datetime
-from logging.handlers import RotatingFileHandler
 from os.path import expanduser
 from shutil import copyfile
 from time import sleep
@@ -19,19 +18,7 @@ RECORD_MENU = 2
 QLC_MENU = 3
 
 user_preset_path = expanduser("~") + "/.config/dmx-priest/presets"
-config_path = expanduser("~") + "/.config/dmx-priest/"
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(
-        handlers=[RotatingFileHandler(filename=config_path+'dmx-priest.log', maxBytes=100000, backupCount=10)],
-        level=logging.DEBUG,
-        format="[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s",
-        datefmt='%Y-%m-%dT%H:%M:%S')
-try:
-    beamer = Beamer()
-except:
-    logger.error("Failed to open serial port for beamer control")
-    pass
+beamer = Beamer()
 
 def pool():
     while True:
@@ -47,13 +34,8 @@ class Menu:
         self.position = 0
         self.menu = MAIN_MENU
         self.rotary = rotary_encoder.RotaryEncoder(callback=self.action)
-        try:
-            self.lcd = RPi_I2C_driver.lcd()
-        except Exception as e:
-            logger.error("Failed to open LCD")
-            logger.error(e, exc_info=True)
-            raise
         self.blackout_button = blackout_button.BlackoutButton(callback=self.blackout_button_action)
+        self.lcd = RPi_I2C_driver.lcd()
         self.set_text()
 
     def get_preset_name(self):
@@ -67,15 +49,18 @@ class Menu:
         self.lcd.lcd_clear()
         if self.menu == MAIN_MENU:
             if self.position <= 20:
-                if self.position % 2 == 0:
+                if self.position % 3 == 0:
                     self.lcd.lcd_display_string("Play mode", 1)
                     self.lcd.lcd_display_string("push the knob", 2)
-                else:
+                elif self.position % 3 == 1:
                     if beamer.init:
                         self.lcd.lcd_display_string("Beamer", 1)
                     else:
                         self.lcd.lcd_display_string("Beamer error", 1)
                     self.lcd.lcd_display_string("push to toggle", 2)
+                else:
+                    self.lcd.lcd_display_string("QLC mode", 1)
+                    self.lcd.lcd_display_string("push the knob", 2)
             elif self.position <= 30:
                 self.lcd.lcd_display_string("Record mode", 1)
                 self.lcd.lcd_display_string("push the knob", 2)
@@ -104,13 +89,17 @@ class Menu:
         self.is_playing = False
         if self.menu == MAIN_MENU:
             if self.position <= 20:
-                if self.position % 2 == 0:
+                if self.position % 3 == 0:
                     self.presets = sorted(os.listdir(user_preset_path))
                     self.menu = PLAY_MENU
                     self.position = 0
                     ola.patch_output()
-                else:
+                elif self.position % 3 == 1:
                     beamer.toggle()
+                else:
+                    self.menu = QLC_MENU
+                    qlc.start_qlc()
+                    print("after start qlc")
             elif self.position <= 30:
                 self.menu = RECORD_MENU
                 ola.patch_input()
@@ -177,17 +166,12 @@ class Menu:
         ola.unpatch()
 
     def blackout(self):
-        logger.debug("blackout initiated")
         self.blackout_routine("1")
-        logger.debug("blackout 1 finished")
         self.blackout_routine("2")
-        logger.debug("blackout 2 finished")
         self.blackout_routine("3")
-        logger.debug("blackout 3 finished")
         self.menu = MAIN_MENU
         self.position = 0
         self.set_text()
-        logger.debug("blackout finished")
 
 def main():
     if not os.path.exists(user_preset_path):

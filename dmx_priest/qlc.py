@@ -6,7 +6,7 @@ from ola import unpatch
 def start_qlc():
     unpatch()
     os.environ["QT_QPA_PLATFORM"] = 'offscreen'
-    subprocess.Popen(["qlcplus", "-m", "-n", "-w", "-p", "-d", "0", "-o", "/home/pi/acu-lite.qxw"])
+    subprocess.Popen(["qlcplus", "-m", "-n", "-w", "-p", "-o", "/home/pi/acu-lite.qxw"])
 
 def stop():
     my_pid = os.popen('ps --no-headers -C qlcplus').read(5)
