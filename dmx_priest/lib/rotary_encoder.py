@@ -18,11 +18,11 @@ class RotaryEncoder:
 
     def pin_a_rising(self):  # Pin A event handler
         if self.pin_b.is_pressed:
-            self.callback(RotaryEncoder.LEFT)  # pin A rising while A is active is a clockwise turn
+            self.callback(RotaryEncoder.RIGHT)  # pin A rising while A is active is a clockwise turn
 
     def pin_b_rising(self):  # Pin B event handler
         if self.pin_a.is_pressed:
-            self.callback(RotaryEncoder.RIGHT)  # pin B rising while A is active is a clockwise turn
+            self.callback(RotaryEncoder.LEFT)  # pin B rising while A is active is a clockwise turn
 
     def pin_sw_rising(self):
         if self.sw.is_pressed:
