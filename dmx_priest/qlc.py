@@ -1,10 +1,10 @@
 import subprocess
 import os
 from time import sleep
-from ola import unpatch
+from dmx_priest import ola
 
 def start_qlc():
-    unpatch()
+    ola.unpatch()
     os.environ["QT_QPA_PLATFORM"] = 'offscreen'
     subprocess.Popen(["qlcplus", "-m", "-n", "-w", "-p", "-o", "/home/pi/acu-lite.qxw"])
 
@@ -13,4 +13,4 @@ def stop():
     if my_pid != "":
         my_pid = int(my_pid)
         subprocess.run(["killall", "qlcplus"])
-        sleep(30)
+        sleep(30)        
