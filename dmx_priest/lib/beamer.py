@@ -15,7 +15,8 @@ class Beamer:
                 bytesize=serial.EIGHTBITS)
         except:
             pass
-        self.init = True
+        else:
+            self.init = True
 
 
     def toggle(self):
