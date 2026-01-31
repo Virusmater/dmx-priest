@@ -55,7 +55,7 @@ pi@raspberrypi:~ $ sudo apt-get dist-upgrade
 ### Open Lightning Architecture
 Install OLA, GIT and QLC+
 ```bash
-pi@raspberrypi:~ $ sudo apt-get install ola qlcplus
+pi@raspberrypi:~ $ sudo apt-get install ola qlcplus python3-pip
 ```
 check if it works
 http://[Pi-IP-address]:9090/ola.html  
