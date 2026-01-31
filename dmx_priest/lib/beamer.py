@@ -6,6 +6,7 @@ import serial
 class Beamer:
 
     def __init__(self):
+        self.init = False
         try:
             self.ser = serial.Serial(
                 port='/dev/ttyUSB0',
