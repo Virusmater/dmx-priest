@@ -53,55 +53,13 @@ pi@raspberrypi:~ $ sudo apt-get update
 pi@raspberrypi:~ $ sudo apt-get dist-upgrade
 ```
 ### Open Lightning Architecture
-Install software to build Open Lightning Architecture and also few python libraries
+Install OLA, GIT and QLC+
 ```bash
-pi@raspberrypi:~ $ sudo apt-get install git autoconf libtool bison flex uuid-dev libcppunit-dev protobuf-compiler libmicrohttpd-dev libprotoc-dev i2c-tools python3-smbus python3-gpiozero build-essential make python3-protobuf python3-numpy
-pi@raspberrypi:~ $ git clone https://github.com/OpenLightingProject/ola.git
-pi@raspberrypi:~ $ cd ola
-```
-compile and install ola. it will take some (a lot) time:
-```bash
-pi@raspberrypi:~/ola $ autoreconf -i
-pi@raspberrypi:~/ola $ ./configure --enable-rdm-tests
-pi@raspberrypi:~/ola $ make
-pi@raspberrypi:~/ola $ sudo make install
-```
-load libraries and start daemon:
-```bash
-pi@raspberrypi:~/ola $ sudo ldconfig
-pi@raspberrypi:~/ola $ olad -l 3
+pi@raspberrypi:~ $ sudo apt-get install ola qlcplus
 ```
 check if it works
 http://[Pi-IP-address]:9090/ola.html  
 
-create a systemd service for autoload of olad:  
-
-create .service file
-```
-pi@raspberrypi:~ $ sudo nano /etc/systemd/system/olad.service
-```
-and add inside:
-```
-[Unit]
-Description=OLA daemon
-After=network.target
-StartLimitIntervalSec=0
-
-[Service]
-Type=simple
-Restart=always
-RestartSec=1
-User=pi
-ExecStart=olad
-
-[Install]
-WantedBy=multi-user.target
-```
-start service and enable autostart:
-```bash
-pi@raspberrypi:~ $ sudo systemctl start olad
-pi@raspberrypi:~ $ sudo systemctl enable olad
-```
 ### I2C interface
 enable i2c interface:
 ```
