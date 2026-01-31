@@ -41,9 +41,8 @@ I just broke Micro USB cable in between and soldered a button in case Raspberry 
 
 ## Software
 ### OS
-install Raspberry Pi OS (32-bit) Lite using Etcher  
+install Raspberry Pi OS (64-bit) Lite on sd card, configure network and ssh access in the Imager
 
-add file "ssh" to /boot in order to enable SSH access  
 ```bash
 youruser@homepc:~ $ ssh pi@[Pi-IP-address]
 ```
