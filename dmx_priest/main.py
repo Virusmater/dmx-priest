@@ -123,7 +123,7 @@ class Menu:
                 self.menu = MAIN_MENU
                 self.position = 0
         elif self.menu == QLC_MENU:
-            self.lcd.lcd_display_string("QLC in stopping..", 1)
+            self.lcd.lcd_display_string("QLC is stopping..", 1)
             self.lcd.lcd_display_string("please wait...", 2)
             qlc.stop()
             self.menu = MAIN_MENU
