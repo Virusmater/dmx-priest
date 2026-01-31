@@ -87,9 +87,16 @@ static domain_name_servers=2.124.1.1
 ```
 
 ### dmx-priest
-install application for recording and playing presets:
+
+create venv:
 ```bash
-pi@raspberrypi:~ $ sudo pip3 install git+https://github.com/Virusmater/dmx-priest
+pi@dmx-priest:~ $ python3 -m venv dmxpriest-venv
+```
+
+install application for recording and playing presets:
+
+```bash
+pi@dmx-priest:~ $ dmxpriest-venv/bin/pip3 install git+https://github.com/Virusmater/dmx-priest
 ```
 doing the same what did for olad:
 ```bash
