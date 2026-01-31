@@ -55,7 +55,7 @@ pi@raspberrypi:~ $ sudo apt-get dist-upgrade
 ### Open Lightning Architecture
 Install software to build Open Lightning Architecture and also few python libraries
 ```bash
-pi@raspberrypi:~ $ sudo apt-get install git autoconf libtool bison flex uuid-dev libcppunit-dev python-protobuf python-numpy protobuf-compiler  libmicrohttpd-dev libprotoc-dev i2c-tools python3-smbus python3-gpiozero python3-pip3
+pi@raspberrypi:~ $ sudo apt-get install git autoconf libtool bison flex uuid-dev libcppunit-dev protobuf-compiler libmicrohttpd-dev libprotoc-dev i2c-tools python3-smbus python3-gpiozero build-essential make python3-protobuf python3-numpy
 pi@raspberrypi:~ $ git clone https://github.com/OpenLightingProject/ola.git
 pi@raspberrypi:~ $ cd ola
 ```
