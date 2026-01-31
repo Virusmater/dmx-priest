@@ -99,11 +99,10 @@ pi@dmx-priest:~ $ dmxpriest-venv/bin/pip3 install git+https://github.com/Virusma
 ```
 doing the same what did for olad:
 ```bash
-pi@raspberrypi:~ $ nano /etc/systemd/system/dmx-priest.service 
+pi@raspberrypi:~ $ sudo nano /etc/systemd/system/dmx-priest.service 
 [Unit]
 Description=dmx-priest
-Requires=olad.service
-After=network.target olad.service
+After=network.target
 StartLimitIntervalSec=0
 
 [Service]
@@ -111,8 +110,9 @@ Type=simple
 Restart=always
 RestartSec=1
 User=pi
-ExecStart=dmx-priest
+ExecStart=/home/pi/dmxpriest-venv/bin/python3 /home/pi/dmxpriest-venv/bin/dmx-priest
 Environment=PYTHONUNBUFFERED=1
+Environment="LG_WD=/tmp"
 
 [Install]
 WantedBy=multi-user.target
