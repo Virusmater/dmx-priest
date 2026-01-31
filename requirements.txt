@@ -3,3 +3,4 @@ smbus~=1.1.post2
 gpiozero~=2.0.1
 pyserial~=3.5
 RPi.GPIO~=0.7.1
+lgpio~=0.2.2.0
