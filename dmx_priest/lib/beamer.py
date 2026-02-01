@@ -7,6 +7,9 @@ class Beamer:
 
     def __init__(self):
         self.init = False
+        self.connect()
+
+    def connect(self):
         try:
             self.ser = serial.Serial(
                 port='/dev/ttyUSB0',
@@ -19,9 +22,9 @@ class Beamer:
         else:
             self.init = True
 
-
     def toggle(self):
         if not self.init:
+            self.connect()
             return
         try:
             self.ser.open()
@@ -50,6 +53,7 @@ class Beamer:
             packet.append(0xFF)
             self.ser.write(packet)
         except Exception as e:
+            self.init = False
             print("Error during beamer toggle:", e)
             pass
         finally:
@@ -57,6 +61,7 @@ class Beamer:
 
     def off(self):
         if not self.init:
+            self.connect()
             return
         try:
             self.ser.open()
@@ -72,6 +77,7 @@ class Beamer:
             packet.append(0xFF)
             self.ser.write(packet)
         except Exception as e:
+            self.init = False
             print("Error during beamer off:", e)
             pass
         finally:
