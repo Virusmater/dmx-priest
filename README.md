@@ -59,6 +59,11 @@ pi@raspberrypi:~ $ sudo apt-get install ola qlcplus python3-pip swig liblgpio-de
 check if it works
 http://[Pi-IP-address]:9090/ola.html  
 
+disable plugins using usb in following files
+```bash
+/etc/ola/ola-usbserial.conf
+/etc/ola/ola-usbdmx.conf
+```
 ### I2C interface
 enable i2c interface:
 ```
