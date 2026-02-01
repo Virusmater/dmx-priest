@@ -27,7 +27,8 @@ class Beamer:
             self.connect()
             return
         try:
-            self.ser.open()
+            if(self.ser.isOpen() == False):
+                self.ser.open()
             packet = bytearray()
             packet.append(0x7E)
             packet.append(0x30)
@@ -55,7 +56,6 @@ class Beamer:
         except Exception as e:
             self.init = False
             print("Error during beamer toggle:", e)
-            pass
         finally:
             self.ser.close()
 
@@ -64,7 +64,8 @@ class Beamer:
             self.connect()
             return
         try:
-            self.ser.open()
+            if(self.ser.isOpen() == False):
+                self.ser.open()
             packet = bytearray()
             packet.append(0x7E)
             packet.append(0x30)
@@ -79,7 +80,6 @@ class Beamer:
         except Exception as e:
             self.init = False
             print("Error during beamer off:", e)
-            pass
         finally:
             self.ser.close()
 
