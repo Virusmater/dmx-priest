@@ -61,8 +61,9 @@ http://[Pi-IP-address]:9090/ola.html
 
 disable plugins using usb in following files
 ```bash
-/etc/ola/ola-usbserial.conf
-/etc/ola/ola-usbdmx.conf
+sudo nano /etc/ola/ola-usbserial.conf
+sudo nano /etc/ola/ola-usbdmx.conf
+sudo nano /etc/ola/ola-stageprofi.conf
 ```
 ### I2C interface
 enable i2c interface:
