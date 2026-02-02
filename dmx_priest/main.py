@@ -36,13 +36,14 @@ class Menu:
     is_recording = False
     is_playing = False
 
-    def __init__(self):
+    def __init__(self, beamer):
         self.position = 0
         self.menu = MAIN_MENU
         self.rotary = rotary_encoder.RotaryEncoder(callback=self.action)
         self.blackout_button = blackout_button.BlackoutButton(callback=self.blackout_button_action)
         self.lcd = RPi_I2C_driver.lcd()
         self.set_text()
+        self.beamer = beamer
 
     def get_preset_name(self):
         if self.position >= len(self.presets):
@@ -179,7 +180,7 @@ class Menu:
         self.position = 0
         self.set_text()
 
-def main(self):
+def main():
     if not os.path.exists(user_preset_path):
         os.makedirs(user_preset_path)
         copyfile(presets_dir + "/99_blackout.ola", user_preset_path + "/99_blackout.ola")
@@ -190,9 +191,9 @@ def main(self):
         config.read(config_file)
     print('Config:')
     print({section: dict(config[section]) for section in config})
-    self.beamer = Beamer(device=config['DEFAULT']['beamer_device'])
+    beamer = Beamer(device=config['DEFAULT']['beamer_device'])
 
-    Menu()
+    menu = Menu(beamer = beamer)
     pool()
 
 
