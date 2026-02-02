@@ -179,7 +179,7 @@ class Menu:
         self.position = 0
         self.set_text()
 
-def main():
+def main(self):
     if not os.path.exists(user_preset_path):
         os.makedirs(user_preset_path)
         copyfile(presets_dir + "/99_blackout.ola", user_preset_path + "/99_blackout.ola")
