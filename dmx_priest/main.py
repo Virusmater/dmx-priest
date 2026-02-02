@@ -193,7 +193,7 @@ def main():
     print({section: dict(config[section]) for section in config})
     beamer = Beamer(device=config['DEFAULT']['beamer_device'])
 
-    menu = Menu(beamer = beamer, lcd_address = device=config['DEFAULT']['lcd_address'])
+    menu = Menu(beamer = beamer, lcd_address = config['DEFAULT']['lcd_address'])
     pool()
 
 
