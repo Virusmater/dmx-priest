@@ -7,8 +7,8 @@ class Beamer:
 
     def __init__(self, device):
         self.init = False
-        self.connect()
         self.device = device
+        self.connect()
 
     def connect(self):
         try:
