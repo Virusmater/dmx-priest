@@ -11,13 +11,19 @@ from dmx_priest.lib import RPi_I2C_driver
 from dmx_priest.lib import rotary_encoder
 from dmx_priest.lib.beamer import Beamer
 from dmx_priest.lib import blackout_button
+import configparser
 
+config = configparser.ConfigParser()
+config['DEFAULT'] = {'beamer_device': '/dev/ttyUSB0',
+                     'lcd_address': '0x27'}
 MAIN_MENU = 0
 PLAY_MENU = 1
 RECORD_MENU = 2
 QLC_MENU = 3
 
-user_preset_path = expanduser("~") + "/.config/dmx-priest/presets"
+config_path = expanduser("~") + "/.config/dmx-priest/"
+config_file = expanduser("~") + config_path + "dmx-priest.ini"
+user_preset_path = config_path + "presets"
 beamer = Beamer()
 
 def pool():
@@ -177,6 +183,13 @@ def main():
     if not os.path.exists(user_preset_path):
         os.makedirs(user_preset_path)
         copyfile(presets_dir + "/99_blackout.ola", user_preset_path + "/99_blackout.ola")
+    if not os.path.exists(config_file):
+        with open(config_file, 'w') as conf:
+            config.write(conf)
+    else:
+        config.read(config_file)
+    print('Config:')
+    print({section: dict(config[section]) for section in config})
     Menu()
     pool()
 
