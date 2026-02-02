@@ -22,7 +22,7 @@ RECORD_MENU = 2
 QLC_MENU = 3
 
 config_path = expanduser("~") + "/.config/dmx-priest/"
-config_file = expanduser("~") + config_path + "dmx-priest.ini"
+config_file = config_path + "dmx-priest.ini"
 user_preset_path = config_path + "presets"
 beamer = Beamer()
 
