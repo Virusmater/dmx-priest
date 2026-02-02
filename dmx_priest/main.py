@@ -24,7 +24,7 @@ QLC_MENU = 3
 config_path = expanduser("~") + "/.config/dmx-priest/"
 config_file = config_path + "dmx-priest.ini"
 user_preset_path = config_path + "presets"
-beamer = Beamer()
+
 
 def pool():
     while True:
@@ -190,6 +190,8 @@ def main():
         config.read(config_file)
     print('Config:')
     print({section: dict(config[section]) for section in config})
+    beamer = Beamer(device=config['DEFAULT']['beamer_device'])
+
     Menu()
     pool()
 
