@@ -5,14 +5,15 @@ import serial
 
 class Beamer:
 
-    def __init__(self):
+    def __init__(self, device):
         self.init = False
         self.connect()
+        self.device = device
 
     def connect(self):
         try:
             self.ser = serial.Serial(
-                port='/dev/ttyUSB0',
+                port=self.device,
                 baudrate=9600,
                 parity=serial.PARITY_NONE,
                 stopbits=serial.STOPBITS_ONE,
