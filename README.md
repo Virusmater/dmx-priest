@@ -101,7 +101,7 @@ pi@dmx-priest:~ $ python3 -m venv dmxpriest-venv
 install application for recording and playing presets:
 
 ```bash
-pi@dmx-priest:~ $ dmxpriest-venv/bin/pip3  --upgrade --force-reinstall  git+https://github.com/Virusmater/dmx-priest@debian13
+pi@dmx-priest:~ $ dmxpriest-venv/bin/pip3 install --upgrade --force-reinstall  git+https://github.com/Virusmater/dmx-priest@debian13
 ```
 doing the same what did for olad:
 ```bash
