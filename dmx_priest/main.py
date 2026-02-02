@@ -36,12 +36,12 @@ class Menu:
     is_recording = False
     is_playing = False
 
-    def __init__(self, beamer):
+    def __init__(self, beamer, lcd_address):
         self.position = 0
         self.menu = MAIN_MENU
         self.rotary = rotary_encoder.RotaryEncoder(callback=self.action)
         self.blackout_button = blackout_button.BlackoutButton(callback=self.blackout_button_action)
-        self.lcd = RPi_I2C_driver.lcd()
+        self.lcd = RPi_I2C_driver.lcd(address = lcd_address)
         self.set_text()
         self.beamer = beamer
 
@@ -193,7 +193,7 @@ def main():
     print({section: dict(config[section]) for section in config})
     beamer = Beamer(device=config['DEFAULT']['beamer_device'])
 
-    menu = Menu(beamer = beamer)
+    menu = Menu(beamer = beamer, lcd_address = device=config['DEFAULT']['lcd_address'])
     pool()
 
 
