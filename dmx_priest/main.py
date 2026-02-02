@@ -59,7 +59,7 @@ class Menu:
                     self.lcd.lcd_display_string("Play mode", 1)
                     self.lcd.lcd_display_string("push the knob", 2)
                 elif self.position % 3 == 1:
-                    if beamer.init:
+                    if self.beamer.init:
                         self.lcd.lcd_display_string("Beamer", 1)
                     else:
                         self.lcd.lcd_display_string("Beamer error", 1)
@@ -101,7 +101,7 @@ class Menu:
                     self.position = 0
                     ola.patch_output()
                 elif self.position % 3 == 1:
-                    beamer.toggle()
+                    self.beamer.toggle()
                 else:
                     self.menu = QLC_MENU
                     qlc.start_qlc()
@@ -154,7 +154,7 @@ class Menu:
         self.lcd.lcd_display_string("blackout", 2)
         qlc.stop()
         self.lcd.lcd_display_string("blackout.", 2)
-        beamer.off()
+        self.beamer.off()
         sleep(2)
         self.lcd.lcd_display_string("blackout..", 2)
         ola.unpatch()
@@ -190,7 +190,7 @@ def main():
         config.read(config_file)
     print('Config:')
     print({section: dict(config[section]) for section in config})
-    beamer = Beamer(device=config['DEFAULT']['beamer_device'])
+    self.beamer = Beamer(device=config['DEFAULT']['beamer_device'])
 
     Menu()
     pool()
