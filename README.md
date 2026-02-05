@@ -79,7 +79,7 @@ get address of the LCD display:
 ```bash
 pi@raspberrypi:~/dmx-priest $ sudo i2cdetect -y 1
 ```
-In my case it was 3f. Change it in RPi_I2C_driver.py if needed (better to take it from the variable, but it isn't done yet)
+In my case it was 27. Change it in RPi_I2C_driver.py if needed (better to take it from the variable, but it isn't done yet)
 ### Static IP (optional)
 Just to be sure let's set on Raspberry Pi static IP in 2.x.x.x range.  
 Add to the end of /etc/dhcpcd.conf following lines:
