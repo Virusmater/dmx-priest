@@ -55,7 +55,7 @@ class Menu:
     def set_text(self):
         self.lcd.lcd_clear()
         if self.menu == MAIN_MENU:
-            if self.position <= 20:
+            if self.position < 20:
                 if self.position % 3 == 0:
                     self.lcd.lcd_display_string("Play mode", 1)
                     self.lcd.lcd_display_string("push the knob", 2)
@@ -68,11 +68,8 @@ class Menu:
                 else:
                     self.lcd.lcd_display_string("QLC mode", 1)
                     self.lcd.lcd_display_string("push the knob", 2)
-            elif self.position <= 30:
+            else:
                 self.lcd.lcd_display_string("Record mode", 1)
-                self.lcd.lcd_display_string("push the knob", 2)
-            elif self.position > 30:
-                self.lcd.lcd_display_string("QLC mode", 1)
                 self.lcd.lcd_display_string("push the knob", 2)
         elif self.menu == PLAY_MENU:
             if self.is_playing:
@@ -95,7 +92,7 @@ class Menu:
     def select(self):
         self.is_playing = False
         if self.menu == MAIN_MENU:
-            if self.position <= 20:
+            if self.position < 20:
                 if self.position % 3 == 0:
                     self.presets = sorted(os.listdir(user_preset_path))
                     self.menu = PLAY_MENU
@@ -107,13 +104,9 @@ class Menu:
                     self.menu = QLC_MENU
                     qlc.start_qlc()
                     print("after start qlc")
-            elif self.position <= 30:
+            else:
                 self.menu = RECORD_MENU
                 ola.patch_input()
-            else:
-                self.menu = QLC_MENU
-                qlc.start_qlc()
-                print("after start qlc")
         elif self.menu == PLAY_MENU:
             self.is_playing = True
             ola.play(user_preset_path + "/" + self.get_preset_name())
@@ -143,6 +136,8 @@ class Menu:
             self.select()
         if self.position < 0:
             self.position = 0
+        elif self.position >= 20:
+            self.position = 20
         self.set_text()
 
     def blackout_button_action(self):
