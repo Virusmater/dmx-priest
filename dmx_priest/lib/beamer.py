@@ -19,6 +19,7 @@ class Beamer:
                 stopbits=serial.STOPBITS_ONE,
                 bytesize=serial.EIGHTBITS)
         except Exception as e:
+            self.init = False
             print("Error during serial port init:", e)
         else:
             self.init = True
