@@ -51,7 +51,7 @@ class i2c_device:
 
 
 # LCD Address
-ADDRESS = 0x3f
+ADDRESS = 0x27
 
 # commands
 LCD_CLEARDISPLAY = 0x01
@@ -102,8 +102,8 @@ Rs = 0b00000001  # Register select bit
 
 class lcd:
     # initializes objects and lcd
-    def __init__(self):
-        self.lcd_device = i2c_device(ADDRESS)
+    def __init__(self, address):
+        self.lcd_device = i2c_device(address)
 
         self.lcd_write(0x03)
         self.lcd_write(0x03)

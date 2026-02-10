@@ -41,9 +41,8 @@ I just broke Micro USB cable in between and soldered a button in case Raspberry 
 
 ## Software
 ### OS
-install Raspberry Pi OS (32-bit) Lite using Etcher  
+install Raspberry Pi OS (64-bit) Lite on sd card, configure network and ssh access in the Imager
 
-add file "ssh" to /boot in order to enable SSH access  
 ```bash
 youruser@homepc:~ $ ssh pi@[Pi-IP-address]
 ```
@@ -53,54 +52,18 @@ pi@raspberrypi:~ $ sudo apt-get update
 pi@raspberrypi:~ $ sudo apt-get dist-upgrade
 ```
 ### Open Lightning Architecture
-Install software to build Open Lightning Architecture and also few python libraries
+Install OLA, GIT and QLC+
 ```bash
-pi@raspberrypi:~ $ sudo apt-get install git autoconf libtool bison flex uuid-dev libcppunit-dev python-protobuf python-numpy protobuf-compiler  libmicrohttpd-dev libprotoc-dev i2c-tools python3-smbus python3-gpiozero python3-pip3
-pi@raspberrypi:~ $ git clone https://github.com/OpenLightingProject/ola.git
-pi@raspberrypi:~ $ cd ola
-```
-compile and install ola. it will take some (a lot) time:
-```bash
-pi@raspberrypi:~/ola $ autoreconf -i
-pi@raspberrypi:~/ola $ ./configure --enable-rdm-tests
-pi@raspberrypi:~/ola $ make
-pi@raspberrypi:~/ola $ sudo make install
-```
-load libraries and start daemon:
-```bash
-pi@raspberrypi:~/ola $ sudo ldconfig
-pi@raspberrypi:~/ola $ olad -l 3
+pi@raspberrypi:~ $ sudo apt-get install ola qlcplus python3-pip swig liblgpio-dev i2c-tools git
 ```
 check if it works
 http://[Pi-IP-address]:9090/ola.html  
 
-create a systemd service for autoload of olad:  
-
-create .service file
-```
-pi@raspberrypi:~ $ sudo nano /etc/systemd/system/olad.service
-```
-and add inside:
-```
-[Unit]
-Description=OLA daemon
-After=network.target
-StartLimitIntervalSec=0
-
-[Service]
-Type=simple
-Restart=always
-RestartSec=1
-User=pi
-ExecStart=olad
-
-[Install]
-WantedBy=multi-user.target
-```
-start service and enable autostart:
+disable plugins using usb in following files
 ```bash
-pi@raspberrypi:~ $ sudo systemctl start olad
-pi@raspberrypi:~ $ sudo systemctl enable olad
+sudo nano /etc/ola/ola-usbserial.conf
+sudo nano /etc/ola/ola-usbdmx.conf
+sudo nano /etc/ola/ola-stageprofi.conf
 ```
 ### I2C interface
 enable i2c interface:
@@ -116,7 +79,7 @@ get address of the LCD display:
 ```bash
 pi@raspberrypi:~/dmx-priest $ sudo i2cdetect -y 1
 ```
-In my case it was 3f. Change it in RPi_I2C_driver.py if needed (better to take it from the variable, but it isn't done yet)
+In my case it was 27. Change it in RPi_I2C_driver.py if needed (better to take it from the variable, but it isn't done yet)
 ### Static IP (optional)
 Just to be sure let's set on Raspberry Pi static IP in 2.x.x.x range.  
 Add to the end of /etc/dhcpcd.conf following lines:
@@ -129,17 +92,23 @@ static domain_name_servers=2.124.1.1
 ```
 
 ### dmx-priest
-install application for recording and playing presets:
+
+create venv:
 ```bash
-pi@raspberrypi:~ $ sudo pip3 install git+https://github.com/Virusmater/dmx-priest
+pi@dmx-priest:~ $ python3 -m venv dmxpriest-venv
+```
+
+install application for recording and playing presets:
+
+```bash
+pi@dmx-priest:~ $ dmxpriest-venv/bin/pip3 install --upgrade --force-reinstall  git+https://github.com/Virusmater/dmx-priest@debian13
 ```
 doing the same what did for olad:
 ```bash
-pi@raspberrypi:~ $ nano /etc/systemd/system/dmx-priest.service 
+pi@raspberrypi:~ $ sudo nano /etc/systemd/system/dmx-priest.service 
 [Unit]
 Description=dmx-priest
-Requires=olad.service
-After=network.target olad.service
+After=network.target
 StartLimitIntervalSec=0
 
 [Service]
@@ -147,8 +116,9 @@ Type=simple
 Restart=always
 RestartSec=1
 User=pi
-ExecStart=dmx-priest
+ExecStart=/home/pi/dmxpriest-venv/bin/python3 /home/pi/dmxpriest-venv/bin/dmx-priest
 Environment=PYTHONUNBUFFERED=1
+Environment="LG_WD=/tmp"
 
 [Install]
 WantedBy=multi-user.target

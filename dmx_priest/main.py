@@ -11,14 +11,20 @@ from dmx_priest.lib import RPi_I2C_driver
 from dmx_priest.lib import rotary_encoder
 from dmx_priest.lib.beamer import Beamer
 from dmx_priest.lib import blackout_button
+import configparser
 
+config = configparser.ConfigParser()
+config['DEFAULT'] = {'beamer_device': '/dev/ttyUSB0',
+                     'lcd_address': '0x27'}
 MAIN_MENU = 0
 PLAY_MENU = 1
 RECORD_MENU = 2
 QLC_MENU = 3
 
-user_preset_path = expanduser("~") + "/.config/dmx-priest/presets"
-beamer = Beamer()
+config_path = expanduser("~") + "/.config/dmx-priest/"
+config_file = config_path + "dmx-priest.ini"
+user_preset_path = config_path + "presets"
+
 
 def pool():
     while True:
@@ -30,13 +36,14 @@ class Menu:
     is_recording = False
     is_playing = False
 
-    def __init__(self):
+    def __init__(self, beamer, lcd_address):
         self.position = 0
         self.menu = MAIN_MENU
         self.rotary = rotary_encoder.RotaryEncoder(callback=self.action)
         self.blackout_button = blackout_button.BlackoutButton(callback=self.blackout_button_action)
-        self.lcd = RPi_I2C_driver.lcd()
+        self.lcd = RPi_I2C_driver.lcd(address = lcd_address)
         self.set_text()
+        self.beamer = beamer
 
     def get_preset_name(self):
         if self.position >= len(self.presets):
@@ -48,12 +55,12 @@ class Menu:
     def set_text(self):
         self.lcd.lcd_clear()
         if self.menu == MAIN_MENU:
-            if self.position <= 20:
+            if self.position < 20:
                 if self.position % 3 == 0:
                     self.lcd.lcd_display_string("Play mode", 1)
                     self.lcd.lcd_display_string("push the knob", 2)
                 elif self.position % 3 == 1:
-                    if beamer.init:
+                    if self.beamer.init:
                         self.lcd.lcd_display_string("Beamer", 1)
                     else:
                         self.lcd.lcd_display_string("Beamer error", 1)
@@ -61,11 +68,8 @@ class Menu:
                 else:
                     self.lcd.lcd_display_string("QLC mode", 1)
                     self.lcd.lcd_display_string("push the knob", 2)
-            elif self.position <= 30:
+            else:
                 self.lcd.lcd_display_string("Record mode", 1)
-                self.lcd.lcd_display_string("push the knob", 2)
-            elif self.position > 30:
-                self.lcd.lcd_display_string("QLC mode", 1)
                 self.lcd.lcd_display_string("push the knob", 2)
         elif self.menu == PLAY_MENU:
             if self.is_playing:
@@ -88,25 +92,21 @@ class Menu:
     def select(self):
         self.is_playing = False
         if self.menu == MAIN_MENU:
-            if self.position <= 20:
+            if self.position < 20:
                 if self.position % 3 == 0:
                     self.presets = sorted(os.listdir(user_preset_path))
                     self.menu = PLAY_MENU
                     self.position = 0
                     ola.patch_output()
                 elif self.position % 3 == 1:
-                    beamer.toggle()
+                    self.beamer.toggle()
                 else:
                     self.menu = QLC_MENU
                     qlc.start_qlc()
                     print("after start qlc")
-            elif self.position <= 30:
+            else:
                 self.menu = RECORD_MENU
                 ola.patch_input()
-            else:
-                self.menu = QLC_MENU
-                qlc.start_qlc()
-                print("after start qlc")
         elif self.menu == PLAY_MENU:
             self.is_playing = True
             ola.play(user_preset_path + "/" + self.get_preset_name())
@@ -123,7 +123,7 @@ class Menu:
                 self.menu = MAIN_MENU
                 self.position = 0
         elif self.menu == QLC_MENU:
-            self.lcd.lcd_display_string("QLC in stopping..", 1)
+            self.lcd.lcd_display_string("QLC is stopping..", 1)
             self.lcd.lcd_display_string("please wait...", 2)
             qlc.stop()
             self.menu = MAIN_MENU
@@ -136,6 +136,8 @@ class Menu:
             self.select()
         if self.position < 0:
             self.position = 0
+        elif self.position >= 20:
+            self.position = 20
         self.set_text()
 
     def blackout_button_action(self):
@@ -148,7 +150,7 @@ class Menu:
         self.lcd.lcd_display_string("blackout", 2)
         qlc.stop()
         self.lcd.lcd_display_string("blackout.", 2)
-        beamer.off()
+        self.beamer.off()
         sleep(2)
         self.lcd.lcd_display_string("blackout..", 2)
         ola.unpatch()
@@ -177,7 +179,16 @@ def main():
     if not os.path.exists(user_preset_path):
         os.makedirs(user_preset_path)
         copyfile(presets_dir + "/99_blackout.ola", user_preset_path + "/99_blackout.ola")
-    Menu()
+    if not os.path.exists(config_file):
+        with open(config_file, 'w') as conf:
+            config.write(conf)
+    else:
+        config.read(config_file)
+    print('Config:')
+    print({section: dict(config[section]) for section in config})
+    beamer = Beamer(device=config['DEFAULT']['beamer_device'])
+
+    menu = Menu(beamer = beamer, lcd_address = int(config['DEFAULT']['lcd_address'], 0))
     pool()
 
 
